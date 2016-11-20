@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>foo</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    #content {
+      min-width: 320px;
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+
+    #overlay {
+      display: flex;
+      background: gray;
+      height: 585px;
+    }
+
+    #sidebar {
+      width: 200px;
+      background: steelblue;
+      overflow: auto;
+    }
+
+    #map {
+      background: hotpink;
+      flex: 1 1 auto;
+    }
+
+    .h_fix {
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .h_fullscreen {
+      height: 100vh;
+    }
+
+    .map--fullscreen {
+      width: calc(100vw - 200px);
+    }
+
+    .h_animate {
+      transition: all 0.5s;
+    }
+
+    ul {
+      list-style: none;
+      color: white;
+    }
+
+    li {
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="content">
+    <br><br><br><br><br><br>
+    <div id="overlay">
+      <div id="sidebar">
+        <ul>
+          <li>foo</li>
+          <li>bar</li>
+          <li>baz</li>
+          <li>foo</li>
+          <li>bar</li>
+          <li>baz</li>
+          <li>foo</li>
+          <li>bar</li>
+          <li>baz</li>
+          <li>foo</li>
+          <li>bar</li>
+          <li>baz</li>
+          <li>foo</li>
+          <li>bar</li>
+          <li>baz</li>
+        </ul>
+      </div>
+      <div id="map"></div>
+    </div>
+    <br><br><br><br><br><br>
+  </div>
+  <script>
+    const overlay = document.querySelector('#overlay');
+    const sidebar = document.querySelector('#sidebar');
+    const map = document.querySelector('#map');
+
+    document.addEventListener('click', e => {
+      const startDims = overlay.getBoundingClientRect();
+      console.log(startDims);
+
+      overlay.classList.toggle('h_fix');
+      sidebar.classList.toggle('h_fullscreen');
+      map.classList.toggle('h_fullscreen');
+      map.classList.toggle('map--fullscreen');
+
+      const endDims = overlay.getBoundingClientRect();
+      console.log(endDims);
+
+      const x = startDims.left - endDims.left;
+      const y = startDims.top - endDims.top;
+      const sx = startDims.width / endDims.width;
+      const sy = startDims.height / endDims.height;
+      console.log(x, y, sx, sy);
+
+      overlay.style.transformOrigin = '0 0';
+      overlay.style.transform = `translate(${x}px, ${y}px) scale(${sx}, ${sy})`;
+
+      requestAnimationFrame(() => {
+        overlay.classList.toggle('h_animate');
+        overlay.style.transform = '';
+      });
+
+    });
+  </script>
+</body>
+</html>
